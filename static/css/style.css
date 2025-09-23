@@ -1,0 +1,8 @@
+.my{
+    background-color: gray;
+    text-align: center;
+    font-family: sans-serif;
+    margin-top: 40px;
+    border: 1px solid red;
+    border-radius: 10px;
+}
