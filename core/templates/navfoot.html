@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Event Management</title>
+<script src="https://cdn.tailwindcss.com"></script>
+
+</head>
+<body class="min-h-screen flex flex-col bg-gray-50">
+
+  <!-- Navbar -->
+   <nav class="bg-white shadow-md fixed w-full top-0 left-0 z-50">
+    <div class="container mx-auto flex justify-between items-center p-4">
+
+      <!-- Left side: Logo/Text -->
+      <div class="text-xl font-bold text-green-700 cursor-pointer">
+        <a href="">Event Management</a>
+      </div>
+
+      <!-- Right side: Auth Links or Profile dropdown -->
+      <div class="relative" id="profile-dropdown-container">
+        {% if user.is_authenticated %}
+          <img 
+            id="profile-toggle"
+            src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://i.pravatar.cc/40{% endif %}" 
+            alt="Profile" 
+            class="w-10 h-10 rounded-full object-cover border-2 border-green-600 cursor-pointer"
+          />
+          <ul 
+            id="profile-dropdown" 
+            class="absolute right-0 mt-2 bg-white rounded shadow-xl text-gray-700 min-w-[10rem] hidden"
+          >
+            <li><a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-green-100 transition">Dashboard</a></li>
+            <li>
+              <form method="POST" action="">
+                {% csrf_token %}
+                <button type="submit" class="w-full text-left px-4 py-2 hover:bg-green-100 transition">Logout</button>
+              </form>
+            </li>
+          </ul>
+        {% else %}
+          <div class="flex items-center justify-center">
+            <a href="" class="mr-6 text-blue-600 hover:underline font-semibold">SignIn</a>
+          <a href="" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-semibold">SignUp</a>
+          </div>
+        {% endif %}
+      </div>
+
+    </div>
+  </nav>
+
+  <!-- Spacer for fixed navbar -->
+  <div class="h-16"></div>
+
+  <!-- Main content block -->
+  {% block content %}
+
+  {% endblock %}
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-gray-400 py-8 mt-12">
+    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4 space-y-4 md:space-y-0">
+      <p class="text-sm md:text-base">© 2025 Event Management. All rights reserved.</p>
+      <div class="flex space-x-8 text-sm md:text-base">
+        <a href="#" class="hover:text-white transition">Privacy Policy</a>
+        <a href="#" class="hover:text-white transition">Terms of Service</a>
+        <a href="#" class="hover:text-white transition">Contact</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const toggle = document.getElementById('profile-toggle');
+      const dropdown = document.getElementById('profile-dropdown');
+
+      if (toggle) {
+        toggle.addEventListener('click', function (e) {
+          e.stopPropagation();
+          dropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown if clicked outside
+        document.addEventListener('click', function () {
+          if (!dropdown.classList.contains('hidden')) {
+            dropdown.classList.add('hidden');
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
+</html>
