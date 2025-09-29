@@ -49,4 +49,26 @@ def create_event(request):
             messages.success(request, "Event created successfully !")
             return redirect('create_event')
     return render(request, 'event/create_event.html', {'form':form})
-            
+
+def update_event(request, event_id):
+    event = Event.objects.select_related('category').prefetch_related('participant').get(id=event_id)
+    form = EventCreateForm(instance=event)
+    if request.method == 'POST':
+        form = EventCreateForm(request.POST, request.FILES, instance=event)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Event updated successfully !")
+            return redirect('update_event', event_id=event.id)
+    return render(request, 'event/create_event.html', {'form':form})
+
+def delete_event(request, event_id):
+    event = Event.objects.select_related('category').prefetch_related('participant').get(id=event_id)
+    if request.method == 'POST':
+        event.delete()
+        messages.success(request, "Event deleted successfully !")
+        return redirect('dashboard')
+    return render(request, 'dashboard/dashboard.html')
+
+def event_detail(request, event_id):
+    event = Event.objects.select_related('category').prefetch_related('participant').get(id=event_id)
+    return render(request, 'event/event_detail.html', {'event':event})

@@ -15,7 +15,7 @@
 
       <!-- Left side: Logo/Text -->
       <div class="text-xl font-bold text-green-700 cursor-pointer">
-        <a href="">Event Management</a>
+        <a href="{% url 'home' %}">Event Management</a>
       </div>
 
       <!-- Right side: Auth Links or Profile dropdown -->
@@ -33,7 +33,7 @@
           >
             <li><a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-green-100 transition">Dashboard</a></li>
             <li>
-              <form method="POST" action="">
+              <form method="POST" action="{% url 'logout' %}">
                 {% csrf_token %}
                 <button type="submit" class="w-full text-left px-4 py-2 hover:bg-green-100 transition">Logout</button>
               </form>
@@ -41,8 +41,8 @@
           </ul>
         {% else %}
           <div class="flex items-center justify-center">
-            <a href="" class="mr-6 text-blue-600 hover:underline font-semibold">SignIn</a>
-          <a href="" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-semibold">SignUp</a>
+            <a href="{% url 'register' %}" class="mr-6 text-blue-600 hover:underline font-semibold">SignIn</a>
+          <a href="{% url 'login' %}" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition font-semibold">SignUp</a>
           </div>
         {% endif %}
       </div>

@@ -1,5 +1,5 @@
 {% extends "dashboard/dashNavFoot.html" %}
-<title>Dashboard</title>
+<title>{% block title %}Dashboard{% endblock %}</title>
 {% block dash %}
 <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
 
@@ -37,7 +37,7 @@
 
   </div>
 
-  <h3 class="text-lg sm:text-2xl font-semibold mb-4 text-gray-700">Todays Event List</h3>
+  <h3 class="text-lg sm:text-2xl font-semibold mb-4 text-gray-700">Event List</h3>
 
   {% if messages %}
     {% for msg in messages %}
@@ -67,10 +67,10 @@
           <td class="px-4 py-3 whitespace-nowrap">{{event.date|date:"F j, Y" }}</td>
           <td class="px-4 py-3 whitespace-nowrap text-right">
             {% if request.user.is_staff %}
-              <a href="" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+              <a href="{% url 'event_detail' event.id %}" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
                 See details
               </a>
-              <form action="" method="POST" style="display:inline;">
+              <form action="{% url 'delete_event' event.id %}" method="POST" style="display:inline;">
                   {% csrf_token %}
                   <button type="submit"
                   class="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition ml-2">
@@ -79,7 +79,7 @@
               </form>
 
             {% else %}
-              <a href="" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+              <a href="{% url 'event_detail' event.id %}" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
                 See details
               </a>
             {% endif %}
