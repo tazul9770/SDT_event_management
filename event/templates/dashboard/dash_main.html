@@ -66,8 +66,8 @@
           
           <td class="px-4 py-3 whitespace-nowrap">{{event.date|date:"F j, Y" }}</td>
           <td class="px-4 py-3 whitespace-nowrap text-right">
-            {% if request.user.is_staff %}
-              <a href="{% url 'event_detail' event.id %}" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+            {% if role == 'Admin' or role == 'Organizer' %}
+              <a href="{% url 'rsvp_event' event.id %}" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
                 See details
               </a>
               <form action="{% url 'delete_event' event.id %}" method="POST" style="display:inline;">
@@ -79,7 +79,7 @@
               </form>
 
             {% else %}
-              <a href="{% url 'event_detail' event.id %}" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
+              <a href="{% url 'rsvp_event' event.id %}" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
                 See details
               </a>
             {% endif %}

@@ -32,6 +32,7 @@
             class="absolute right-0 mt-2 bg-white rounded shadow-xl text-gray-700 min-w-[10rem] hidden"
           >
             <li><a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-green-100 transition">Dashboard</a></li>
+            <li><a href="" class="block px-4 py-2 hover:bg-green-100 transition">Profile</a></li>
             <li>
               <form method="POST" action="{% url 'logout' %}">
                 {% csrf_token %}

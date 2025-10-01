@@ -25,3 +25,14 @@ class Event(models.Model):
 
     def __str__(self):
         return f"{self.name} ({self.date})"
+
+class RSVP(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    event = models.ForeignKey(Event, on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'event')
+
+    def __str__(self):
+        return f"{self.user.username} RSVPed to {self.event.name}"
