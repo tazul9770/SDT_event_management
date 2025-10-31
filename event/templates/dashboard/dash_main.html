@@ -1,97 +1,117 @@
 {% extends "dashboard/dashNavFoot.html" %}
 <title>{% block title %}Dashboard{% endblock %}</title>
 {% block dash %}
-<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+<main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 w-full">
 
-  <h2 class="text-xl sm:text-2xl font-bold mb-8 text-gray-900">Dashboard Overview</h2>
+  <!-- Dashboard Heading -->
+  <h2 class="text-3xl font-bold mb-10 text-gray-900 tracking-tight">Dashboard Overview</h2>
 
   <!-- Stat Cards -->
-  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-12">
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 mb-14">
+
+    <!-- Total Events -->
     <a href="{% url 'dashboard' %}" class="block">
-      <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-        <h3 class="text-sm font-semibold text-gray-500 mb-2 tracking-wide uppercase">Total Events</h3>
-        <p class="text-3xl sm:text-4xl font-extrabold text-yellow-500">{{ total_events }}</p>
+      <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition transform text-center">
+        <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">Total Events</h3>
+        <p class="text-4xl font-extrabold text-blue-600">{{ total_events }}</p>
       </div>
     </a>
 
+    <!-- Today's Events -->
     <a href="{% url 'dashboard' %}?dates=todays" class="block">
-      <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-        <h3 class="text-sm font-semibold text-gray-500 mb-2 tracking-wide uppercase">Todays Events</h3>
-        <p class="text-3xl sm:text-4xl font-extrabold text-yellow-500">{{todays_events}}</p>
+      <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition transform text-center">
+        <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">Today's Events</h3>
+        <p class="text-4xl font-extrabold text-green-600">{{ todays_events }}</p>
       </div>
     </a>
 
+    <!-- Upcoming Events -->
     <a href="{% url 'dashboard' %}?dates=upcoming" class="block">
-      <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-        <h3 class="text-sm font-semibold text-gray-500 mb-2 tracking-wide uppercase">Upcoming Events</h3>
-        <p class="text-3xl sm:text-4xl font-extrabold text-blue-600">{{upcoming_events}}</p>
+      <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition transform text-center">
+        <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">Upcoming Events</h3>
+        <p class="text-4xl font-extrabold text-indigo-600">{{ upcoming_events }}</p>
       </div>
     </a>
 
+    <!-- Past Events -->
     <a href="{% url 'dashboard' %}?dates=past" class="block">
-      <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center justify-center hover:shadow-xl transition-shadow duration-300 cursor-pointer">
-        <h3 class="text-sm font-semibold text-gray-500 mb-2 tracking-wide uppercase">Past Events</h3>
-        <p class="text-3xl sm:text-4xl font-extrabold text-purple-600">{{past_events}}</p>
+      <div class="bg-white rounded-2xl p-6 shadow-lg hover:shadow-2xl hover:-translate-y-1 transition transform text-center">
+        <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">Past Events</h3>
+        <p class="text-4xl font-extrabold text-pink-600">{{ past_events }}</p>
       </div>
     </a>
-
   </div>
 
-  <h3 class="text-lg sm:text-2xl font-semibold mb-4 text-gray-700">Event List</h3>
+  <!-- Section Title -->
+  <h3 class="text-2xl font-semibold mb-6 text-gray-800">Event List</h3>
 
+  <!-- Messages -->
   {% if messages %}
     {% for msg in messages %}
-      <p class="text-center bg-gray-300 text-green-600 font-medium mb-4">{{msg}}</p>
+      <div class="bg-green-100 text-green-800 border border-green-300 px-4 py-3 rounded-lg mb-4">
+        {{ msg }}
+      </div>
     {% endfor %}
   {% endif %}
 
-  <!-- Recent Complaints -->
-  <section class="bg-white rounded-xl shadow-lg overflow-x-auto">
-    <table class="min-w-full divide-y divide-gray-200 text-gray-700 text-sm sm:text-base">
-      <thead class="bg-gray-50">
-        <tr>
-          <th scope="col" class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider">Name</th>
-          <th scope="col" class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider">Category</th>
-          <th scope="col" class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider">Location</th>
-          <th scope="col" class="px-4 py-3 text-left font-semibold text-gray-500 uppercase tracking-wider">Date</th>
-          <th scope="col" class="px-4 py-3"></th>
-        </tr>
-      </thead>
-      <tbody class="divide-y divide-gray-100">
-        {% for event in events %}
-        <tr class="hover:bg-green-50 transition">
-          <td class="px-4 py-3 whitespace-nowrap">{{ event.name }}</td>
-          <td class="px-4 py-3 whitespace-nowrap">{{event.category.name}}</td>
-          <td class="px-4 py-3 whitespace-nowrap">{{event.location}}</td>
-          
-          <td class="px-4 py-3 whitespace-nowrap">{{event.date|date:"F j, Y" }}</td>
-          <td class="px-4 py-3 whitespace-nowrap text-right">
-            {% if role == 'Admin' or role == 'Organizer' %}
-              <a href="{% url 'rsvp_event' event.id %}" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
-                See details
-              </a>
-              <form action="{% url 'delete_event' event.id %}" method="POST" style="display:inline;">
+  <!-- Event Table -->
+  <section class="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100">
+    <div class="overflow-x-auto">
+      <table class="w-full text-left text-sm text-gray-700">
+        <thead class="bg-gray-50 text-gray-600 border-b">
+          <tr>
+            <th class="px-5 py-3 font-semibold">Name</th>
+            <th class="px-5 py-3 font-semibold">Category</th>
+            <th class="px-5 py-3 font-semibold">Location</th>
+            <th class="px-5 py-3 font-semibold">Date</th>
+            <th class="px-5 py-3"></th>
+          </tr>
+        </thead>
+
+        <tbody>
+          {% for event in events %}
+          <tr class="border-b hover:bg-blue-50/50 transition">
+            <td class="px-5 py-4">{{ event.name }}</td>
+            <td class="px-5 py-4">{{ event.category.name }}</td>
+            <td class="px-5 py-4">{{ event.location }}</td>
+            <td class="px-5 py-4">{{ event.date|date:"F j, Y" }}</td>
+            <td class="px-5 py-4 text-right">
+
+              <!-- Organizer & Admin Actions -->
+              {% if role == 'Admin' or role == 'Organizer' %}
+
+                <a href="{% url 'rsvp_event' event.id %}"
+                   class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition">
+                  View
+                </a>
+
+                <form action="{% url 'delete_event' event.id %}" method="POST" class="inline">
                   {% csrf_token %}
                   <button type="submit"
-                  class="px-3 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition ml-2">
-                  Delete
+                    class="px-4 py-2 rounded-lg bg-red-600 text-white hover:bg-red-700 shadow-sm transition ml-2">
+                    Delete
                   </button>
-              </form>
+                </form>
 
-            {% else %}
-              <a href="{% url 'rsvp_event' event.id %}" class="px-3 py-2 bg-green-600 text-white rounded-md hover:bg-green-700 transition">
-                See details
-              </a>
-            {% endif %}
-          </td>
-        </tr>
-        {% empty %}
-        <tr>
-          <td colspan="5" class="px-4 py-3 text-center text-gray-500">No complaints found.</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+              {% else %}
+
+                <a href="{% url 'rsvp_event' event.id %}"
+                   class="px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 shadow-sm transition">
+                  View
+                </a>
+
+              {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" class="px-5 py-4 text-center text-gray-500">No events found.</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
   </section>
+
 </main>
 {% endblock dash %}

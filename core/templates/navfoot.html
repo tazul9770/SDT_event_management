@@ -4,91 +4,188 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Event Management</title>
-<script src="https://cdn.tailwindcss.com"></script>
-
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="min-h-screen flex flex-col bg-gray-50">
 
-  <!-- Navbar -->
-   <nav class="bg-white shadow-md fixed w-full top-0 left-0 z-50">
-    <div class="container mx-auto flex justify-between items-center p-4">
+<body class="min-h-screen flex flex-col bg-gray-100">
 
-      <!-- Left side: Logo/Text -->
-      <div class="text-xl font-bold text-green-700 cursor-pointer">
-        <a href="{% url 'home' %}">Event Management</a>
+<!-- NAVBAR -->
+<nav class="bg-white/90 backdrop-blur-md border-b shadow-sm fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center px-6 py-4">
+
+    <!-- Logo -->
+    <a href="{% url 'home' %}" class="text-2xl font-extrabold text-blue-700 tracking-wide hover:text-blue-800 transition">
+      Event<span class="text-blue-500">Pro</span>
+    </a>
+
+    <!-- Mobile Menu Button -->
+    <button id="mobile-menu-btn" class="md:hidden text-gray-700 text-3xl focus:outline-none">
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+    </button>
+
+    <!-- Desktop Menu -->
+    <div class="hidden md:flex items-center space-x-8">
+
+      {% if user.is_authenticated %}
+
+      <!-- Profile Dropdown -->
+      <div class="relative">
+        <img id="profile-toggle"
+          src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://i.pravatar.cc/100{% endif %}"
+          class="w-11 h-11 rounded-full border-2 border-blue-600 cursor-pointer object-cover hover:scale-105 transition" />
+
+        <div id="profile-dropdown"
+          class="absolute right-0 mt-3 bg-white border rounded-xl shadow-xl w-48 py-2 hidden">
+          <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-100">Dashboard</a>
+
+          <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button class="block w-full text-left px-4 py-2 hover:bg-blue-100 transition">Logout</button>
+          </form>
+        </div>
       </div>
 
-      <!-- Right side: Auth Links or Profile dropdown -->
-      <div class="relative" id="profile-dropdown-container">
-        {% if user.is_authenticated %}
-          <img 
-            id="profile-toggle"
-            src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://i.pravatar.cc/40{% endif %}" 
-            alt="Profile" 
-            class="w-10 h-10 rounded-full object-cover border-2 border-green-600 cursor-pointer"
-          />
-          <ul 
-            id="profile-dropdown" 
-            class="absolute right-0 mt-2 bg-white rounded shadow-xl text-gray-700 min-w-[10rem] hidden"
-          >
-            <li><a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-green-100 transition">Dashboard</a></li>            <li>
-              <form method="POST" action="{% url 'logout' %}">
-                {% csrf_token %}
-                <button type="submit" class="w-full text-left px-4 py-2 hover:bg-green-100 transition">Logout</button>
-              </form>
-            </li>
-          </ul>
-        {% else %}
-          <div class="flex items-center justify-center">
-          <a href="{% url 'login' %}" class="px-4 py-2 rounded hover:underline transition font-semibold text-blue-600">Login</a>
-          <a href="{% url 'register' %}" class="mr-6 text-blue-600 hover:underline font-semibold">Register</a>
-          </div>
-        {% endif %}
-      </div>
+      {% else %}
+      <a href="{% url 'login' %}" class="font-medium text-gray-700 hover:text-blue-600 transition">
+        Login
+      </a>
+      <a href="{% url 'register' %}"
+        class="px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition font-medium">
+        Register
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown -->
+  <div id="mobile-menu" class="hidden bg-white border-t shadow-md md:hidden">
+    <div class="p-4 space-y-3">
+
+      {% if user.is_authenticated %}
+      <a href="{% url 'dashboard' %}" class="block text-gray-700 hover:text-blue-600">Dashboard</a>
+
+      <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+        <button class="text-gray-700 hover:text-blue-600">Logout</button>
+      </form>
+
+      {% else %}
+      <a href="{% url 'login' %}"
+        class="block font-medium text-gray-700 hover:text-blue-600 transition">
+        Login
+      </a>
+      <a href="{% url 'register' %}"
+        class="block w-fit px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        Register
+      </a>
+      {% endif %}
 
     </div>
-  </nav>
+  </div>
+</nav>
 
-  <!-- Spacer for fixed navbar -->
-  <div class="h-16"></div>
 
-  <!-- Main content block -->
-  {% block content %}
+<!-- Spacer -->
+<div class="h-20"></div>
 
-  {% endblock %}
+{% block content %}
+{% endblock %}
 
-  <!-- Footer -->
-  <footer class="bg-gray-900 text-gray-400 py-8 mt-12">
-    <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4 space-y-4 md:space-y-0">
-      <p class="text-sm md:text-base">© 2025 Event Management. All rights reserved.</p>
-      <div class="flex space-x-8 text-sm md:text-base">
-        <a href="#" class="hover:text-white transition">Privacy Policy</a>
-        <a href="#" class="hover:text-white transition">Terms of Service</a>
-        <a href="#" class="hover:text-white transition">Contact</a>
+<!-- FOOTER -->
+<footer class="bg-gray-950 text-gray-300 pt-14 pb-10 mt-20">
+  <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+
+    <!-- Brand -->
+    <div>
+      <h2 class="text-white text-2xl font-bold tracking-wide mb-3">Event Management</h2>
+      <p class="text-gray-400 text-sm leading-relaxed">
+        Crafting seamless event experiences with innovation, precision, and elegance.
+      </p>
+
+      <!-- Social Icons -->
+      <div class="flex space-x-4 mt-5">
+        <a href="#" class="hover:text-white transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M22 12..."></path> <!-- Replace with actual icon path if needed -->
+          </svg>
+        </a>
+        <a href="#" class="hover:text-white transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M22 4.01..."></path>
+          </svg>
+        </a>
+        <a href="#" class="hover:text-white transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2..."></path>
+          </svg>
+        </a>
       </div>
     </div>
-  </footer>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      const toggle = document.getElementById('profile-toggle');
-      const dropdown = document.getElementById('profile-dropdown');
+    <!-- Quick Links -->
+    <div>
+      <h3 class="text-white text-lg font-semibold mb-3">Quick Links</h3>
+      <ul class="space-y-2">
+        <li><a href="#" class="hover:text-white transition">About Us</a></li>
+        <li><a href="#" class="hover:text-white transition">Services</a></li>
+        <li><a href="#" class="hover:text-white transition">Pricing</a></li>
+        <li><a href="#" class="hover:text-white transition">Blog</a></li>
+      </ul>
+    </div>
 
-      if (toggle) {
-        toggle.addEventListener('click', function (e) {
-          e.stopPropagation();
-          dropdown.classList.toggle('hidden');
-        });
+    <!-- Support -->
+    <div>
+      <h3 class="text-white text-lg font-semibold mb-3">Support</h3>
+      <ul class="space-y-2">
+        <li><a href="#" class="hover:text-white transition">Help Center</a></li>
+        <li><a href="#" class="hover:text-white transition">FAQs</a></li>
+        <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
+        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+      </ul>
+    </div>
 
-        // Close dropdown if clicked outside
-        document.addEventListener('click', function () {
-          if (!dropdown.classList.contains('hidden')) {
-            dropdown.classList.add('hidden');
-          }
-        });
-      }
-    });
-  </script>
+    <!-- Contact -->
+    <div>
+      <h3 class="text-white text-lg font-semibold mb-3">Contact</h3>
+      <p class="text-gray-400 text-sm">📍 Mymensingh, Bangladesh</p>
+      <p class="text-gray-400 text-sm">📞 +880 184 260 9770</p>
+      <p class="text-gray-400 text-sm">✉️ tazulislam42609770@gmail.com</p>
+
+      <a href="#" class="inline-block mt-4 px-4 py-2 border border-gray-500 rounded-lg hover:bg-green-600 hover:border-green-600 hover:text-white transition font-medium">
+        Get in Touch
+      </a>
+    </div>
+
+  </div>
+
+  <!-- Bottom Bar -->
+  <div class="border-t border-gray-700 mt-12 pt-5 text-center">
+    <p class="text-gray-400 text-sm">
+      © 2025 Event Management — Designed with ❤️ for a seamless experience.
+    </p>
+  </div>
+</footer>
+
+
+<script>
+  // Profile dropdown toggle
+  document.addEventListener("click", (e) => {
+    const toggle = document.getElementById("profile-toggle");
+    const dropdown = document.getElementById("profile-dropdown");
+
+    if (toggle && toggle.contains(e.target)) dropdown.classList.toggle("hidden");
+    else if (dropdown && !dropdown.contains(e.target)) dropdown.classList.add("hidden");
+  });
+
+  // Mobile menu
+  document.getElementById("mobile-menu-btn").onclick = () =>
+    document.getElementById("mobile-menu").classList.toggle("hidden");
+
+
+
+</script>
 
 </body>
 </html>
