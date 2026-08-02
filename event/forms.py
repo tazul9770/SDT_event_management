@@ -1,5 +1,5 @@
 from django import forms
-from event.models import Event, RSVP
+from event.models import Event
 
 class EventCreateForm(forms.ModelForm):
     date = forms.DateField(
