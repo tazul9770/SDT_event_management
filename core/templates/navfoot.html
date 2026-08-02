@@ -3,56 +3,63 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Event Management</title>
+  <title>{% block title %}Event Management{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body class="min-h-screen flex flex-col bg-gray-100">
 
 <!-- NAVBAR -->
-<nav class="bg-white/90 backdrop-blur-md border-b shadow-sm fixed w-full top-0 z-50">
-  <div class="container mx-auto flex justify-between items-center px-6 py-4">
+<nav class="bg-white/90 backdrop-blur-md border-b border-gray-100 shadow-sm fixed w-full top-0 z-50">
+  <div class="container mx-auto flex justify-between items-center px-4 sm:px-6 py-3 sm:py-4">
 
     <!-- Logo -->
-    <a href="{% url 'home' %}" class="text-2xl font-extrabold text-blue-700 tracking-wide hover:text-blue-800 transition">
+    <a href="{% url 'home' %}" class="text-xl sm:text-2xl font-extrabold text-blue-700 tracking-wide hover:text-blue-800 transition">
       Event<span class="text-blue-500">Pro</span>
     </a>
 
     <!-- Mobile Menu Button -->
-    <button id="mobile-menu-btn" class="md:hidden text-gray-700 text-3xl focus:outline-none">
-      <svg xmlns="http://www.w3.org/2000/svg" class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="2">
+    <button id="mobile-menu-btn" type="button" aria-label="Toggle menu" aria-expanded="false" class="md:hidden text-gray-700 p-2 -mr-2 rounded-lg hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition">
+      <svg id="menu-icon-open" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2">
         <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+      </svg>
+      <svg id="menu-icon-close" xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 hidden" fill="none" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/>
       </svg>
     </button>
 
     <!-- Desktop Menu -->
-    <div class="hidden md:flex items-center space-x-8">
+    <div class="hidden md:flex items-center gap-6">
 
       {% if user.is_authenticated %}
 
       <!-- Profile Dropdown -->
       <div class="relative">
-        <img id="profile-toggle"
-          src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://i.pravatar.cc/100{% endif %}"
-          class="w-11 h-11 rounded-full border-2 border-blue-600 cursor-pointer object-cover hover:scale-105 transition" />
+        <button id="profile-toggle" type="button" aria-label="Open profile menu" aria-expanded="false"
+          class="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+          <img
+            src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://i.pravatar.cc/100{% endif %}"
+            alt="Profile picture"
+            class="w-10 h-10 rounded-full border-2 border-blue-600 cursor-pointer object-cover hover:scale-105 transition" />
+        </button>
 
         <div id="profile-dropdown"
-          class="absolute right-0 mt-3 bg-white border rounded-xl shadow-xl w-48 py-2 hidden">
-          <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-100">Dashboard</a>
+          class="absolute right-0 mt-3 bg-white border border-gray-100 rounded-xl shadow-xl w-48 py-2 hidden">
+          <a href="{% url 'dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">Dashboard</a>
 
           <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}
-            <button class="block w-full text-left px-4 py-2 hover:bg-blue-100 transition">Logout</button>
+            <button type="submit" class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">Logout</button>
           </form>
         </div>
       </div>
 
       {% else %}
-      <a href="{% url 'login' %}" class="font-medium text-gray-700 hover:text-blue-600 transition">
+      <a href="{% url 'login' %}" class="font-medium text-sm text-gray-700 hover:text-blue-600 transition">
         Login
       </a>
       <a href="{% url 'register' %}"
-        class="px-5 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition font-medium">
+        class="px-5 py-2 bg-blue-600 text-white text-sm rounded-lg shadow-sm hover:bg-blue-700 transition font-medium">
         Register
       </a>
       {% endif %}
@@ -60,24 +67,32 @@
   </div>
 
   <!-- Mobile Dropdown -->
-  <div id="mobile-menu" class="hidden bg-white border-t shadow-md md:hidden">
-    <div class="p-4 space-y-3">
+  <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 shadow-md">
+    <div class="p-4 space-y-1">
 
       {% if user.is_authenticated %}
-      <a href="{% url 'dashboard' %}" class="block text-gray-700 hover:text-blue-600">Dashboard</a>
+      <div class="flex items-center gap-3 px-2 py-3 mb-1 border-b border-gray-100">
+        <img
+          src="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://i.pravatar.cc/100{% endif %}"
+          alt="Profile picture"
+          class="w-10 h-10 rounded-full border-2 border-blue-600 object-cover" />
+        <span class="text-sm font-medium text-gray-800">{{ user.username }}</span>
+      </div>
+
+      <a href="{% url 'dashboard' %}" class="block px-2 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">Dashboard</a>
 
       <form method="POST" action="{% url 'logout' %}">
         {% csrf_token %}
-        <button class="text-gray-700 hover:text-blue-600">Logout</button>
+        <button type="submit" class="block w-full text-left px-2 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">Logout</button>
       </form>
 
       {% else %}
       <a href="{% url 'login' %}"
-        class="block font-medium text-gray-700 hover:text-blue-600 transition">
+        class="block px-2 py-2.5 rounded-lg font-medium text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition">
         Login
       </a>
       <a href="{% url 'register' %}"
-        class="block w-fit px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+        class="block w-full text-center px-4 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium mt-2">
         Register
       </a>
       {% endif %}
@@ -88,37 +103,37 @@
 
 
 <!-- Spacer -->
-<div class="h-20"></div>
+<div class="h-16 sm:h-20"></div>
 
 {% block content %}
 {% endblock %}
 
 <!-- FOOTER -->
-<footer class="bg-gray-950 text-gray-300 pt-14 pb-10 mt-20">
-  <div class="container mx-auto px-6 grid grid-cols-1 md:grid-cols-4 gap-10">
+<footer class="bg-gray-950 text-gray-300 pt-12 sm:pt-14 pb-8 sm:pb-10 mt-16 sm:mt-20">
+  <div class="container mx-auto px-4 sm:px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
 
     <!-- Brand -->
-    <div>
-      <h2 class="text-white text-2xl font-bold tracking-wide mb-3">Event Management</h2>
-      <p class="text-gray-400 text-sm leading-relaxed">
+    <div class="sm:col-span-2 lg:col-span-1">
+      <h2 class="text-white text-xl sm:text-2xl font-bold tracking-wide mb-3">Event Management</h2>
+      <p class="text-gray-400 text-sm leading-relaxed max-w-xs">
         Crafting seamless event experiences with innovation, precision, and elegance.
       </p>
 
       <!-- Social Icons -->
       <div class="flex space-x-4 mt-5">
-        <a href="#" class="hover:text-white transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M22 12..."></path> <!-- Replace with actual icon path if needed -->
+        <a href="#" aria-label="Facebook" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-600 hover:text-white transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M22 12.06C22 6.51 17.52 2 12 2S2 6.51 2 12.06c0 5.02 3.66 9.18 8.44 9.94v-7.03H7.9v-2.91h2.54V9.85c0-2.51 1.49-3.9 3.77-3.9 1.09 0 2.24.2 2.24.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.89h2.78l-.44 2.91h-2.34V22c4.78-.76 8.44-4.92 8.44-9.94Z"/>
           </svg>
         </a>
-        <a href="#" class="hover:text-white transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M22 4.01..."></path>
+        <a href="#" aria-label="Twitter" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-800 hover:bg-blue-500 hover:text-white transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M22 5.9c-.75.33-1.55.55-2.39.65a4.17 4.17 0 0 0 1.83-2.3 8.3 8.3 0 0 1-2.64 1.01 4.15 4.15 0 0 0-7.07 3.78A11.78 11.78 0 0 1 3.15 4.6a4.15 4.15 0 0 0 1.29 5.54c-.68-.02-1.32-.21-1.88-.52v.05a4.15 4.15 0 0 0 3.33 4.07c-.6.17-1.25.19-1.87.07a4.16 4.16 0 0 0 3.88 2.88A8.35 8.35 0 0 1 2 18.57a11.75 11.75 0 0 0 6.36 1.86c7.63 0 11.8-6.32 11.8-11.8 0-.18 0-.36-.01-.54A8.4 8.4 0 0 0 22 5.9Z"/>
           </svg>
         </a>
-        <a href="#" class="hover:text-white transition">
-          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M12 2..."></path>
+        <a href="#" aria-label="Instagram" class="w-9 h-9 flex items-center justify-center rounded-full bg-gray-800 hover:bg-pink-600 hover:text-white transition">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M12 2c2.72 0 3.06.01 4.12.06 1.06.05 1.79.22 2.43.47.66.26 1.22.6 1.77 1.15.55.55.89 1.11 1.15 1.77.25.64.42 1.37.47 2.43.05 1.06.06 1.4.06 4.12s-.01 3.06-.06 4.12c-.05 1.06-.22 1.79-.47 2.43a4.9 4.9 0 0 1-1.15 1.77 4.9 4.9 0 0 1-1.77 1.15c-.64.25-1.37.42-2.43.47-1.06.05-1.4.06-4.12.06s-3.06-.01-4.12-.06c-1.06-.05-1.79-.22-2.43-.47a4.9 4.9 0 0 1-1.77-1.15 4.9 4.9 0 0 1-1.15-1.77c-.25-.64-.42-1.37-.47-2.43C2.01 15.06 2 14.72 2 12s.01-3.06.06-4.12c.05-1.06.22-1.79.47-2.43.26-.66.6-1.22 1.15-1.77A4.9 4.9 0 0 1 5.45.53C6.09.28 6.82.11 7.88.06 8.94.01 9.28 0 12 0Zm0 5a5 5 0 1 0 0 10 5 5 0 0 0 0-10Zm0 8.2a3.2 3.2 0 1 1 0-6.4 3.2 3.2 0 0 1 0 6.4Zm5.2-8.4a1.17 1.17 0 1 1-2.34 0 1.17 1.17 0 0 1 2.34 0Z" transform="translate(0 2)"/>
           </svg>
         </a>
       </div>
@@ -126,9 +141,9 @@
 
     <!-- Quick Links -->
     <div>
-      <h3 class="text-white text-lg font-semibold mb-3">Quick Links</h3>
-      <ul class="space-y-2">
-        <li><a href="#" class="hover:text-white transition">About Us</a></li>
+      <h3 class="text-white text-base sm:text-lg font-semibold mb-3">Quick links</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white transition">About us</a></li>
         <li><a href="#" class="hover:text-white transition">Services</a></li>
         <li><a href="#" class="hover:text-white transition">Pricing</a></li>
         <li><a href="#" class="hover:text-white transition">Blog</a></li>
@@ -137,33 +152,44 @@
 
     <!-- Support -->
     <div>
-      <h3 class="text-white text-lg font-semibold mb-3">Support</h3>
-      <ul class="space-y-2">
-        <li><a href="#" class="hover:text-white transition">Help Center</a></li>
+      <h3 class="text-white text-base sm:text-lg font-semibold mb-3">Support</h3>
+      <ul class="space-y-2 text-sm">
+        <li><a href="#" class="hover:text-white transition">Help center</a></li>
         <li><a href="#" class="hover:text-white transition">FAQs</a></li>
-        <li><a href="#" class="hover:text-white transition">Terms of Service</a></li>
-        <li><a href="#" class="hover:text-white transition">Privacy Policy</a></li>
+        <li><a href="#" class="hover:text-white transition">Terms of service</a></li>
+        <li><a href="#" class="hover:text-white transition">Privacy policy</a></li>
       </ul>
     </div>
 
     <!-- Contact -->
     <div>
-      <h3 class="text-white text-lg font-semibold mb-3">Contact</h3>
-      <p class="text-gray-400 text-sm">📍 Mymensingh, Bangladesh</p>
-      <p class="text-gray-400 text-sm">📞 +880 184 260 9770</p>
-      <p class="text-gray-400 text-sm">✉️ tazulislam42609770@gmail.com</p>
+      <h3 class="text-white text-base sm:text-lg font-semibold mb-3">Contact</h3>
+      <ul class="space-y-2.5 text-sm text-gray-400">
+        <li class="flex items-start gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mt-0.5 shrink-0 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Mymensingh, Bangladesh</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.68 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.32 1.85.55 2.81.68A2 2 0 0 1 22 16.92Z"/></svg>
+          <span>+880 184 260 9770</span>
+        </li>
+        <li class="flex items-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 shrink-0 text-gray-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 6-10 7L2 6"/></svg>
+          <span class="break-all">tazulislam42609770@gmail.com</span>
+        </li>
+      </ul>
 
-      <a href="#" class="inline-block mt-4 px-4 py-2 border border-gray-500 rounded-lg hover:bg-green-600 hover:border-green-600 hover:text-white transition font-medium">
-        Get in Touch
+      <a href="#" class="inline-block mt-4 px-4 py-2 border border-gray-600 rounded-lg hover:bg-green-600 hover:border-green-600 hover:text-white transition font-medium text-sm">
+        Get in touch
       </a>
     </div>
 
   </div>
 
   <!-- Bottom Bar -->
-  <div class="border-t border-gray-700 mt-12 pt-5 text-center">
-    <p class="text-gray-400 text-sm">
-      © 2025 Event Management — Designed with ❤️ for a seamless experience.
+  <div class="border-t border-gray-800 mt-10 sm:mt-12 pt-5 text-center px-4">
+    <p class="text-gray-500 text-xs sm:text-sm">
+      &copy; 2025 Event Management — designed for a seamless experience.
     </p>
   </div>
 </footer>
@@ -174,17 +200,29 @@
   document.addEventListener("click", (e) => {
     const toggle = document.getElementById("profile-toggle");
     const dropdown = document.getElementById("profile-dropdown");
+    if (!toggle || !dropdown) return;
 
-    if (toggle && toggle.contains(e.target)) dropdown.classList.toggle("hidden");
-    else if (dropdown && !dropdown.contains(e.target)) dropdown.classList.add("hidden");
+    if (toggle.contains(e.target)) {
+      const isOpen = dropdown.classList.toggle("hidden") === false;
+      toggle.setAttribute("aria-expanded", isOpen);
+    } else if (!dropdown.contains(e.target)) {
+      dropdown.classList.add("hidden");
+      toggle.setAttribute("aria-expanded", "false");
+    }
   });
 
-  // Mobile menu
-  document.getElementById("mobile-menu-btn").onclick = () =>
-    document.getElementById("mobile-menu").classList.toggle("hidden");
+  // Mobile menu toggle
+  const menuBtn = document.getElementById("mobile-menu-btn");
+  const mobileMenu = document.getElementById("mobile-menu");
+  const iconOpen = document.getElementById("menu-icon-open");
+  const iconClose = document.getElementById("menu-icon-close");
 
-
-
+  menuBtn.addEventListener("click", () => {
+    const isHidden = mobileMenu.classList.toggle("hidden");
+    menuBtn.setAttribute("aria-expanded", String(!isHidden));
+    iconOpen.classList.toggle("hidden", !isHidden);
+    iconClose.classList.toggle("hidden", isHidden);
+  });
 </script>
 
 </body>
