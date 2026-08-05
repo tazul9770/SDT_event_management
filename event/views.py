@@ -52,6 +52,7 @@ def create_event(request):
             return redirect('create_event')
     return render(request, 'event/create_event.html', {'form':form})
 
+
 def update_event(request, event_id):
     event = Event.objects.select_related('category').prefetch_related('participant').get(id=event_id)
     form = EventCreateForm(instance=event)
