@@ -64,8 +64,8 @@ def update_event(request, event_id):
         if form.is_valid():
             form.save()
             messages.success(request, "Event updated successfully !")
-            return redirect('update_event', event_id=event.id)
-    return render(request, 'event/create_event.html', {'form':form})
+            return redirect('rsvp_event', event_id=event.id)
+    return render(request, 'event/update_event.html', {'form':form})
 
 @login_required
 def delete_event(request, event_id):

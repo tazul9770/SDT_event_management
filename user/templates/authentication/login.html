@@ -4,7 +4,15 @@
 <div class="min-h-screen flex items-center justify-center bg-gray-50 p-4">
     <div class="bg-gray-100 shadow-lg rounded-lg max-w-md w-full p-8">
         <h2 class="text-xl font-bold text-center mb-6 text-gray-800">Login to your account</h2>
-
+        
+        {% if messages %}
+            <ul class="mb-4">
+                {% for msg in messages %}
+                    <li class="text-md text-green-700 px-4 py-2 rounded mb-4">{{msg}}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        
         {% if form.non_field_errors %}
             <div class="mb-4 bg-red-100 text-red-700 px-4 py-2 rounded">
                 {% for error in form.non_field_errors %}
