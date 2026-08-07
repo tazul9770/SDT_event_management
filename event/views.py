@@ -100,3 +100,4 @@ def rsvp_event(request, event_id):
         'role': role
     }
     return render(request, 'event/event_detail.html', context)
+

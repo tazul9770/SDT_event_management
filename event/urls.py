@@ -7,5 +7,5 @@ urlpatterns = [
     # path('detail/<int:event_id>/', event_detail, name='event_detail'),
     path('update_event/<int:event_id>/', update_event, name='update_event'),
     path('delete_event/<int:event_id>/', delete_event, name='delete_event'),
-    path('rsvp_event/<int:event_id>/', rsvp_event, name='rsvp_event')
+    path('rsvp_event/<int:event_id>/', rsvp_event, name='rsvp_event'),
 ]

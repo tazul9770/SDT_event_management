@@ -1,5 +1,6 @@
 from django.urls import path
 from user.views import register, log_in, log_out, active_user, user_list, assign_role, create_group, group_list, delete_group, delete_user
+from user.views import ProfileView
 
 urlpatterns = [
     path('register/', register, name='register'),
@@ -11,5 +12,6 @@ urlpatterns = [
     path('create_group/', create_group, name='create_group'),
     path('group_list/', group_list, name='group_list'),
     path('delete_group/<int:group_id>/', delete_group, name='delete_group'),
-    path('delete_user/<int:user_id>/', delete_user, name='delete_user')
+    path('delete_user/<int:user_id>/', delete_user, name='delete_user'),
+    path('profile/', ProfileView.as_view(), name='profile')
 ]

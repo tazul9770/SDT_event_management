@@ -6,6 +6,7 @@ from django.contrib.auth import login, logout
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
+from django.views.generic import TemplateView
 
 User = get_user_model()
 
@@ -91,3 +92,21 @@ def delete_user(request, user_id):
     user.delete()
     messages.success(request, "User deleted successfully")
     return redirect('user_list')
+
+class ProfileView(TemplateView):
+    template_name = 'accounts/profile.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user
+
+        context['username'] = user.username
+        context['email'] = user.email
+        context['name'] = user.get_full_name()
+
+        context['member_since'] = user.date_joined
+        context['last_login'] = user.last_login
+        context['status'] = user.is_active
+        return context
+
+
