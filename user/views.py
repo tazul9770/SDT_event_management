@@ -7,6 +7,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.views.generic import TemplateView
+from django.contrib.auth.views import LoginView
 
 User = get_user_model()
 
@@ -23,15 +24,25 @@ def register(request):
             return redirect('register')
     return render(request, 'authentication/register.html', {'form':form})
 
-def log_in(request):
-    form = LoginForm()
-    if request.method == 'POST':
-        form = LoginForm(data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-            login(request, user)
-            return redirect('home')
-    return render(request, 'authentication/login.html', {'form':form})
+"""This is user login function based view """
+# def log_in(request):
+#     form = LoginForm()
+#     if request.method == 'POST':
+#         form = LoginForm(data=request.POST)
+#         if form.is_valid():
+#             user = form.get_user()
+#             login(request, user)
+#             return redirect('home')
+#     return render(request, 'authentication/login.html', {'form':form})
+
+"""This is user login class based view """
+class LoginUser(LoginView):
+    form_class = LoginForm
+    template_name = 'authentication/login.html'
+
+    def get_success_url(self):
+        next_url = self.request.GET.get('next')
+        return next_url if next_url else super().get_success_url()
 
 def log_out(request):
     if request.method == 'POST':

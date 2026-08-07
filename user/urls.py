@@ -1,11 +1,14 @@
 from django.urls import path
-from user.views import register, log_in, log_out, active_user, user_list, assign_role, create_group, group_list, delete_group, delete_user
-from user.views import ProfileView
+from user.views import register, log_out, active_user, user_list, assign_role, create_group, group_list, delete_group, delete_user
+from user.views import ProfileView, LoginUser
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('register/', register, name='register'),
-    path('login/', log_in, name='login'),
-    path('logout/', log_out, name='logout'),
+    #path('login/', log_in, name='login'),
+    path('login/', LoginUser.as_view(), name='login'),
+    #path('logout/', log_out, name='logout'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('active/<int:user_id>/<str:token>/', active_user),
     path('user_list/', user_list, name='user_list'), 
     path('assign_role/<int:user_id>/', assign_role, name='assign_role'),
