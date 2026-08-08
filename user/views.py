@@ -1,14 +1,16 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from user.forms import RegistrationForm, LoginForm, AssignRoleForm, CreateGroupForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomPasswordResetConfirmForm, EditProfileForm
+from user.forms import RegistrationForm, LoginForm, AssignRoleForm, CreateGroupForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomPasswordResetConfirmForm, EditProfileForm, ContactForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.views.generic import TemplateView, UpdateView
+from django.views.generic import TemplateView, UpdateView, CreateView
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.urls import reverse_lazy
+from django.conf import settings
+from django.core.mail import send_mail
 
 User = get_user_model()
 
@@ -173,6 +175,28 @@ class EditProfileView(UpdateView):
         messages.success(self.request, "Your profile has been updated successfully.")
         return redirect('profile')
     
+class ContactView(CreateView):
+    form_class = ContactForm
+    template_name = 'home.html'
+    #context_object_name = 'form'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        contact = form.instance
+        send_mail(
+            subject=f"New contact message from {contact.name}",
+            message=f"Email: {contact.email}\nMessage: \n{contact.message}",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=['tazulislam42609770@gmail.com'],
+            fail_silently=False
+        )
+        send_mail(
+            subject="Thanks for messaging us",
+            message="We have received your message. Our team will contact you soon.",
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[contact.email],
+            fail_silently=False
+        )
+        return response
     
-
-

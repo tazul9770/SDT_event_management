@@ -1,7 +1,9 @@
 from django.contrib import admin
-from user.models import CustomUser
+from user.models import CustomUser, Contact
 
 admin.site.register(CustomUser)
+admin.site.register(Contact)
+
 
 # @admin.register(CustomUser)
 # class AdminUser(admin.ModelAdmin):

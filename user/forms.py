@@ -3,6 +3,7 @@ from django.contrib.auth import get_user_model
 import re
 from django.contrib.auth.forms import AuthenticationForm, PasswordChangeForm, PasswordResetForm, SetPasswordForm
 from django.contrib.auth.models import Group, Permission
+from user.models import Contact
 
 User = get_user_model()
 
@@ -91,3 +92,8 @@ class EditProfileForm(forms.ModelForm):
         fields = ['username', 'email', 'first_name', 'last_name', 'designation', 
                   'designation_related_something', 'location', 'image', 'bio'
                   ]
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        fields = ['name', 'email', 'message']
