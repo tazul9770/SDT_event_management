@@ -5,7 +5,6 @@ from django.db.models import Count, Q
 from event.models import Event, RSVP
 from event.forms import EventCreateForm, RSVPForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def dashboard(request):
@@ -55,11 +54,7 @@ def create_event(request):
             return redirect('create_event')
     return render(request, 'event/create_event.html', {'form':form})
 
-<<<<<<< HEAD
-
-=======
 @login_required
->>>>>>> feature1
 def update_event(request, event_id):
     event = Event.objects.select_related('category').prefetch_related('participant').get(id=event_id)
     form = EventCreateForm(instance=event)
