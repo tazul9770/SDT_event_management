@@ -115,9 +115,6 @@
       <a href="{% url 'profile' %}" class="block px-2 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">Profile</a>
       {% endif %}
 
-      <a href="" class="block px-2 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">About Us</a>
-      <a href="" class="block px-2 py-2.5 rounded-lg text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">Contact</a>
-
       {% if user.is_authenticated %}
       <div class="border-t border-gray-100 my-2"></div>
       <form method="POST" action="{% url 'logout' %}">
