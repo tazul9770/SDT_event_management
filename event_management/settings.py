@@ -151,10 +151,10 @@ EMAIL_HOST_USER = config('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 
 #deploy er somoi ata 
-#FRONTEND_URL = 'https://sdt-event-management.vercel.app'
+FRONTEND_URL = 'https://sdt-event-management.vercel.app'
 
 #development a ata 
-FRONTEND_URL = 'http://127.0.0.1:8000'
+#FRONTEND_URL = 'http://127.0.0.1:8000'
 
 LOGIN_URL = '/users/login/'
 LOGIN_REDIRECT_URL = '/'

@@ -1,12 +1,12 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from user.forms import RegistrationForm, LoginForm, AssignRoleForm, CreateGroupForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomPasswordResetConfirmForm
+from user.forms import RegistrationForm, LoginForm, AssignRoleForm, CreateGroupForm, CustomPasswordChangeForm, CustomPasswordResetForm, CustomPasswordResetConfirmForm, EditProfileForm
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, UpdateView
 from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
 from django.urls import reverse_lazy
 
@@ -119,6 +119,12 @@ class ProfileView(TemplateView):
         context['member_since'] = user.date_joined
         context['last_login'] = user.last_login
         context['status'] = user.is_active
+        context['designation'] = user.designation
+        context['designation_title'] = user.designation_related_something
+        context['image'] = user.image
+        context['location'] = user.location
+        context['bio'] = user.bio
+
         return context
 
 class ChangePassword(PasswordChangeView):
@@ -152,6 +158,20 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
         messages.success(
             self.request, 'Password reset successfully')
         return super().form_valid(form)
+
+class EditProfileView(UpdateView):
+    model = User
+    form_class = EditProfileForm
+    template_name = 'accounts/update_profile.html'
+    context_object_name = 'form'
+
+    def get_object(self):
+        return self.request.user
+
+    def form_valid(self, form):
+        form.save()
+        messages.success(self.request, "Your profile has been updated successfully.")
+        return redirect('profile')
     
     
 

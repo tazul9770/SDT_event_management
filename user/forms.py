@@ -84,3 +84,10 @@ class CustomPasswordResetForm(PasswordResetForm):
 
 class CustomPasswordResetConfirmForm(SetPasswordForm):
     pass
+
+class EditProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'first_name', 'last_name', 'designation', 
+                  'designation_related_something', 'location', 'image', 'bio'
+                  ]

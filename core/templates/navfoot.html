@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Event Management</title>
+  <title>{% block title %}Event Management{% endblock %}</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
@@ -33,7 +33,11 @@
       <!-- Profile Dropdown -->
       <div class="relative">
         <img id="profile-toggle"
-          src="https://i.pravatar.cc/100"
+          src="{% if request.user.image %}
+            {{ request.user.image.url }}
+         {% else %}
+            https://i.pravatar.cc/100
+         {% endif %}"
           class="w-11 h-11 rounded-full border-2 border-blue-600 cursor-pointer object-cover hover:scale-105 transition" />
 
         <div id="profile-dropdown"
