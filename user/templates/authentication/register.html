@@ -1,59 +1,92 @@
 {% extends "navfoot.html" %}
 {% load widget_tweaks %}
+<title>{% block title %}Register{% endblock title %}</title>
 {% block content %}
-    <div class="max-w-md mx-auto">
-        <div class="bg-gray-50 min-h-screen flex items-center justify-center p-4">
-            <div class="bg-white shadow-lg rounded-lg max-w-md w-full p-8">
-                <h2 class="text-2xl font-semibold text-center text-gray-800 mb-6">
-                    Create An Account 
-                </h2>
+<div class="min-h-screen flex items-center justify-center bg-gray-50 p-4 sm:p-6">
+    <div class="w-full max-w-md">
 
-                {% if messages %}
-                    <ul class="mb-4">
-                        {% for msg in messages %}
-                            <li class="text-md text-green-700 px-4 py-2 rounded mb-4">{{msg}}</li>
-                        {% endfor %}
-                    </ul>
-                {% endif %}
+        <!-- Header -->
+        <div class="text-center mb-6">
+            <div class="inline-flex items-center justify-center w-14 h-14 rounded-full bg-green-100 text-green-600 mb-3">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                </svg>
+            </div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-gray-800">Create an account</h2>
+            <p class="text-gray-500 text-sm mt-1">Sign up to get started, it only takes a minute</p>
+        </div>
 
-                {% if form.non_field_errors %}
-                    <div class="bg-red-100 text-red-700 px-3 py-2 rounded mb-4">
-                        {% for error in form.non_field_errors %}
-                            <p>{{error}}</p>
-                        {% endfor %}
+        {% if messages %}
+            <div class="mb-4 space-y-2">
+                {% for msg in messages %}
+                    <div class="flex items-center gap-2 bg-green-50 border border-green-200 text-green-700 text-sm px-4 py-3 rounded-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+                        </svg>
+                        {{ msg }}
                     </div>
-                {% endif %}
+                {% endfor %}
+            </div>
+        {% endif %}
 
-                <form method="POST" action="" novalidate>
-                    {% csrf_token %}
-                    {% for field in form %}
-                        <label for="{{field.id_for_label}}" class="block mb-1 font-semibold text-gray-700">
-                            {{field.label}}
+        {% if form.non_field_errors %}
+            <div class="mb-4 bg-red-50 border border-red-200 text-red-700 text-sm px-4 py-3 rounded-lg">
+                {% for error in form.non_field_errors %}
+                    <p class="flex items-start gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                        </svg>
+                        <span>{{ error }}</span>
+                    </p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Card -->
+        <div class="bg-white shadow-xl rounded-2xl border border-gray-100 p-6 sm:p-8">
+            <form method="POST" action="" novalidate class="space-y-5">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div>
+                        <label for="{{ field.id_for_label }}" class="block mb-1.5 text-sm font-semibold text-gray-700">
+                            {{ field.label }}
+                            {% if field.field.required %}<span class="text-red-500">*</span>{% endif %}
                         </label>
-                        {{field|add_class:"px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-green-600 focus:border-transparent w-full"}}
+                        {{ field|add_class:"px-3.5 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500/40 focus:border-green-500 w-full text-sm text-gray-800 transition" }}
 
                         {% if field.help_text %}
-                            <small class="text-gray-400">{{field.help_text}}</small>
+                            <p class="text-xs text-gray-400 mt-1">{{ field.help_text }}</p>
                         {% endif %}
 
                         {% if field.errors %}
-                            <ul class="mt-1 text-red-600 text-sm list-disc list-inside">
+                            <ul class="mt-1.5 space-y-0.5">
                                 {% for error in field.errors %}
-                                    <li>{{error}}</li>
+                                    <li class="flex items-center gap-1 text-red-600 text-xs">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+                                        </svg>
+                                        {{ error }}
+                                    </li>
                                 {% endfor %}
                             </ul>
                         {% endif %}
+                    </div>
+                {% endfor %}
 
-                    {% endfor %}
-                    <button type='submit' class="bg-green-500 hover:bg-green-700 text-white px-3 py-2 w-full rounded shadow-lg transition cursor-pointer mt-6">
-                        Register
-                    </button>
-                </form>
-                <p class="mt-6 text-center text-gray-700">
-                    All ready have an account
-                    <a href="" class="text-green-600 hover:underline font-semibold">Login</a>
-                </p>
-            </div>
+                <button type="submit"
+                    class="w-full flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white rounded-lg font-semibold py-3 shadow-md transition cursor-pointer">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM3 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 019.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+                    </svg>
+                    Register
+                </button>
+            </form>
         </div>
+
+        <p class="mt-6 text-center text-gray-600 text-sm">
+            Already have an account?
+            <a href="{% url 'login' %}" class="text-green-600 hover:underline font-semibold">Login</a>
+        </p>
     </div>
+</div>
 {% endblock content %}

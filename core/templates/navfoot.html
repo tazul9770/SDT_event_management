@@ -35,6 +35,7 @@
 
       <!-- Profile Dropdown -->
       <div class="relative">
+<<<<<<< HEAD
         <button id="profile-toggle" type="button" aria-label="Open profile menu" aria-expanded="false"
           class="flex items-center gap-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
           <img
@@ -46,6 +47,20 @@
         <div id="profile-dropdown"
           class="absolute right-0 mt-3 bg-white border border-gray-100 rounded-xl shadow-xl w-48 py-2 hidden">
           <a href="{% url 'dashboard' %}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-700 transition">Dashboard</a>
+=======
+        <img id="profile-toggle"
+          src="{% if request.user.image %}
+            {{ request.user.image.url }}
+         {% else %}
+            https://i.pravatar.cc/100
+         {% endif %}"
+          class="w-11 h-11 rounded-full border-2 border-blue-600 cursor-pointer object-cover hover:scale-105 transition" />
+
+        <div id="profile-dropdown"
+          class="absolute right-0 mt-3 bg-white border rounded-xl shadow-xl w-48 py-2 hidden">
+          <a href="{% url 'dashboard' %}" class="block px-4 py-2 hover:bg-blue-100">Dashboard</a>
+          <a href="{% url 'profile' %}" class="block px-4 py-2 hover:bg-blue-100">Profile</a>
+>>>>>>> feature1
 
           <form method="POST" action="{% url 'logout' %}">
             {% csrf_token %}

@@ -5,7 +5,9 @@ from django.db.models import Count, Q
 from event.models import Event, RSVP
 from event.forms import EventCreateForm, RSVPForm
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required
 
+@login_required
 def dashboard(request):
     today = now().date()
     dates = request.GET.get('dates')
@@ -39,6 +41,7 @@ def dashboard(request):
     }
     return render(request, 'dashboard/dash_main.html', context)
 
+@login_required
 def create_event(request):
     form = EventCreateForm()
     if request.method == 'POST':
@@ -52,7 +55,11 @@ def create_event(request):
             return redirect('create_event')
     return render(request, 'event/create_event.html', {'form':form})
 
+<<<<<<< HEAD
 
+=======
+@login_required
+>>>>>>> feature1
 def update_event(request, event_id):
     event = Event.objects.select_related('category').prefetch_related('participant').get(id=event_id)
     form = EventCreateForm(instance=event)
@@ -61,9 +68,10 @@ def update_event(request, event_id):
         if form.is_valid():
             form.save()
             messages.success(request, "Event updated successfully !")
-            return redirect('update_event', event_id=event.id)
-    return render(request, 'event/create_event.html', {'form':form})
+            return redirect('rsvp_event', event_id=event.id)
+    return render(request, 'event/update_event.html', {'form':form})
 
+@login_required
 def delete_event(request, event_id):
     event = Event.objects.select_related('category').prefetch_related('participant').get(id=event_id)
     if request.method == 'POST':
@@ -101,3 +109,4 @@ def rsvp_event(request, event_id):
         'role': role
     }
     return render(request, 'event/event_detail.html', context)
+
