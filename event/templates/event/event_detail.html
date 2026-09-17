@@ -1,107 +1,123 @@
-{% extends "dashboard/dashNavFoot.html" %}
-<title>{% block title %}Event Details{% endblock %}</title>
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ event.name }} | EventPro{% endblock %}
+{% block content %}
 
-{% block dash %}
-<div class="m-3">
-  <div class="bg-gradient-to-r from-indigo-50 via-white to-indigo-50 min-h-screen flex items-center justify-center p-6">
-    <div class="bg-white shadow-xl rounded-lg max-w-4xl w-full mx-auto p-10 md:p-14 lg:p-20">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
 
-      <!-- Messages -->
-      {% if messages %}
-        <div class="mb-4">
-          {% for message in messages %}
-            <div class="p-3 rounded-md text-white font-semibold
-              {% if message.tags == 'success' %} bg-green-600
-              {% elif message.tags == 'error' %} bg-red-600
-              {% else %} bg-indigo-600
-              {% endif %}">
-              {{ message }}
-            </div>
-          {% endfor %}
+  <!-- Messages -->
+  {% if messages %}
+    <div class="mb-6 space-y-3">
+      {% for message in messages %}
+        <div class="flex items-center gap-3 px-5 py-3 rounded-xl text-sm font-medium
+          {% if message.tags == 'success' %}bg-emerald-50 text-emerald-800 border border-emerald-200
+          {% else %}bg-red-50 text-red-800 border border-red-200{% endif %}">
+          <i class="fas fa-check-circle"></i> {{ message }}
         </div>
-      {% endif %}
+      {% endfor %}
+    </div>
+  {% endif %}
 
-      <!-- Event Title -->
+  <!-- Event Card -->
+  <div class="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden">
+
+    <!-- Hero Image -->
+    {% if event.image %}
+    <div class="relative h-64 sm:h-80 overflow-hidden">
+      <img src="{{ event.image.url }}" alt="{{ event.name }}" class="w-full h-full object-cover" />
+      <div class="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent"></div>
+    </div>
+    {% else %}
+    <div class="h-48 sm:h-64 bg-gradient-to-br from-emerald-100 to-teal-100 flex items-center justify-center">
+      <i class="fas fa-calendar-alt text-6xl text-emerald-300"></i>
+    </div>
+    {% endif %}
+
+    <!-- Content -->
+    <div class="p-6 sm:p-8">
+
+      <!-- Title & Meta -->
       <header class="mb-8">
-        <h1 class="text-4xl font-extrabold text-gray-900 leading-tight">{{ event.name }}</h1>
-        <p class="text-gray-600 mt-2">
-          Category: <span class="font-semibold text-indigo-700">{{ event.category.name }}</span><br>
-          <time datetime="{{ event.date|date:'c' }}" class="italic">
-            {{ event.date|date:"F j, Y" }} at {{ event.time|time:"H:i A" }}
-          </time>
-        </p>
+        <div class="flex flex-wrap items-center gap-2 mb-3">
+          <span class="px-3 py-1 rounded-full bg-emerald-100 text-emerald-800 text-xs font-semibold">{{ event.category.name }}</span>
+        </div>
+        <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight">{{ event.name }}</h1>
+        <div class="mt-4 flex flex-wrap items-center gap-6 text-gray-600">
+          <span class="flex items-center gap-2">
+            <i class="far fa-calendar text-emerald-500"></i> {{ event.date|date:"F j, Y" }}
+          </span>
+          <span class="flex items-center gap-2">
+            <i class="far fa-clock text-emerald-500"></i> {{ event.time|time:"h:i A" }}
+          </span>
+          <span class="flex items-center gap-2">
+            <i class="fas fa-map-marker-alt text-emerald-500"></i> {{ event.location }}
+          </span>
+        </div>
       </header>
-
-      <!-- Event Image -->
-      {% if event.image %}
-      <section class="mb-8">
-        <img src="{{ event.image.url }}" alt="Event Image"
-             class="rounded-lg shadow-lg w-full max-h-[480px] object-cover mx-auto" />
-      </section>
-      {% endif %}
 
       <!-- Description -->
       <section class="mb-8">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Description</h2>
-        <p class="text-gray-700 leading-relaxed text-lg">{{ event.description|default:"No description available." }}</p>
+        <h2 class="text-xl font-bold text-gray-900 mb-3">Description</h2>
+        <p class="text-gray-600 leading-relaxed text-lg">{{ event.description|default:"No description available." }}</p>
       </section>
 
       <!-- Location -->
       <section class="mb-8">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Location</h2>
-        <p class="text-gray-700">{{ event.location }}</p>
+        <h2 class="text-xl font-bold text-gray-900 mb-3">Location</h2>
+        <p class="text-gray-600 flex items-center gap-2">
+          <i class="fas fa-map-marker-alt text-emerald-500"></i> {{ event.location }}
+        </p>
       </section>
 
       <!-- Participants -->
       <section class="mb-8">
-        <h2 class="text-xl font-semibold text-gray-800 mb-4">Participants</h2>
+        <h2 class="text-xl font-bold text-gray-900 mb-4">Participants ({{ event.participants.count }})</h2>
         <div class="flex flex-wrap gap-3">
-          {% for participant in event.participants.all %}
-            <span class="bg-indigo-100 text-indigo-800 text-sm font-medium rounded-full px-4 py-1 shadow-sm">
+          {% for participant in event.participants %}
+            <span class="flex items-center gap-2 px-4 py-2 bg-emerald-50 text-emerald-800 text-sm font-medium rounded-full">
+              {% if participant.image %}
+                <img src="{{ participant.image.url }}" alt="" class="w-6 h-6 rounded-full object-cover" />
+              {% else %}
+                <span class="w-6 h-6 rounded-full bg-emerald-200 flex items-center justify-center text-xs">{{ participant.username|first }}</span>
+              {% endif %}
               {{ participant.get_full_name|default:participant.username }}
             </span>
           {% empty %}
-            <span class="text-gray-500 italic">No participants yet.</span>
+            <span class="text-gray-400 italic">No participants yet.</span>
           {% endfor %}
         </div>
       </section>
 
-      <!-- RSVP Form / Button -->
-      {% if role == 'Participant' %}
-        <div class="mt-6">
+      <!-- RSVP / Actions -->
+      <div class="flex flex-col sm:flex-row gap-4 pt-4 border-t border-gray-100">
+        {% if role == 'Participant' %}
           {% if already_rsvped %}
-            <button class="px-6 py-2 bg-green-500 text-white rounded-md shadow cursor-not-allowed" disabled>
-              Already RSVPed
+            <button class="px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold shadow cursor-not-allowed opacity-75" disabled>
+              <i class="fas fa-check mr-2"></i> Already RSVPed
             </button>
           {% else %}
-            <form method="post">
+            <form method="post" class="flex-1">
               {% csrf_token %}
-              <div class="flex items-center gap-2 mb-2">
+              <div class="flex items-center gap-3 mb-3">
                 {{ form.confirm }}
-                <label for="{{ form.confirm.id_for_label }}" class="text-gray-800 font-medium">
-                  I want to RSVP for this event
-                </label>
+                <label for="{{ form.confirm.id_for_label }}" class="text-gray-700 font-medium">I want to RSVP for this event</label>
               </div>
-              <button type="submit"
-                      class="px-6 py-2 bg-blue-500 text-white rounded-md shadow hover:bg-blue-600 transition">
-                RSVP
+              <button type="submit" class="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white rounded-xl font-semibold shadow hover:shadow-lg transition-all">
+                <i class="fas fa-check-circle mr-2"></i> RSVP
               </button>
             </form>
           {% endif %}
-        </div>
-      {% endif %}
-
-      <!-- Admin / Organizer Update Button -->
-      {% if role == 'Admin' or role == 'Organizer' %}
-        <div class="mt-10">
-          <a href="{% url 'update_event' event.id %}"
-             class="px-6 py-2 bg-indigo-600 text-white rounded-md shadow hover:bg-indigo-700 transition">
-            Update Event
-          </a>
-        </div>
-      {% endif %}
+        {% endif %}
+        {% if role == 'Admin' or role == 'Organizer' %}
+          <div class="flex gap-3">
+            <a href="{% url 'update_event' event.id %}" class="px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition shadow">
+              <i class="fas fa-edit mr-2"></i> Update Event
+            </a>
+          </div>
+        {% endif %}
+      </div>
 
     </div>
   </div>
 </div>
-{% endblock dash %}
+{% endblock %}

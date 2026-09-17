@@ -17,10 +17,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = config('DEBUG', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['.vercel.app', '127.0.0.1', 'localhost']
-CSRF_TRUSTED_ORIGINS = ['https://village-management.vercel.app']
+CSRF_TRUSTED_ORIGINS = [config('FRONTEND_URL', default='https://sdt-event-management.vercel.app')]
 
 AUTH_USER_MODEL = 'user.CustomUser'
 
@@ -58,13 +58,14 @@ ROOT_URLCONF = 'event_management.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "core" / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'core.context_processors.role',
             ],
         },
     },

@@ -7,7 +7,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Group
 from django.views.generic import TemplateView, UpdateView
-from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView
+from django.contrib.auth.views import LoginView, PasswordChangeView, PasswordResetView, PasswordResetConfirmView, PasswordResetDoneView, PasswordResetCompleteView
 from django.urls import reverse_lazy
 
 User = get_user_model()
@@ -58,7 +58,7 @@ def active_user(request, user_id, token):
             user.save()
             return redirect('login')
         else:
-            return HttpResponse("Inavalid id or token")
+            return HttpResponse("Invalid id or token")
     except User.DoesNotExist:
         return HttpResponse("User does not found")
     
@@ -158,6 +158,15 @@ class CustomPasswordResetConfirmView(PasswordResetConfirmView):
         messages.success(
             self.request, 'Password reset successfully')
         return super().form_valid(form)
+
+
+class CustomPasswordResetDoneView(PasswordResetDoneView):
+    template_name = 'authentication/password_reset_done.html'
+    success_url = reverse_lazy('login')
+
+class CustomPasswordResetCompleteView(PasswordResetCompleteView):
+    template_name = 'authentication/password_reset_complete.html'
+    success_url = reverse_lazy('login')
 
 class EditProfileView(UpdateView):
     model = User

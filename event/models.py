@@ -24,6 +24,10 @@ class Event(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name="events")
     participant = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='event')
 
+    @property
+    def participants(self):
+        return self.participant.all()
+
     def __str__(self):
         return f"{self.name} ({self.date})"
 

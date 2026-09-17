@@ -1,77 +1,112 @@
-{% extends "navfoot.html" %}
-{% block title %}Event Management{% endblock %}
-
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Event Management | EventPro{% endblock %}
 {% block content %}
 
-<!-- HERO -->
-<section class="pt-24 pb-32 bg-gradient-to-br from-blue-50 to-blue-200 text-center">
-  <div class="container mx-auto px-6">
-    <h1 class="text-4xl md:text-6xl font-extrabold text-blue-900 leading-tight max-w-4xl mx-auto">
-      Organize Events With Confidence & Precision
-    </h1>
-    <p class="text-lg md:text-xl text-blue-800 mt-6 max-w-3xl mx-auto">
-      A customizable platform to manage, promote, and execute professional events effortlessly.
-    </p>
-    <a href="#" class="mt-10 inline-block bg-blue-600 hover:bg-blue-700 text-white px-10 py-3 rounded-lg shadow-lg font-semibold transition">
-      Get Started
-    </a>
+<!-- HERO SECTION -->
+<section class="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50 pt-28 pb-24 sm:pt-36 sm:pb-32">
+  <div class="absolute inset-0">
+    <div class="absolute top-20 right-20 w-72 h-72 bg-emerald-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
+    <div class="absolute bottom-20 left-20 w-72 h-72 bg-teal-200 rounded-full mix-blend-multiply filter blur-xl opacity-70 animate-pulse"></div>
   </div>
-</section>
-
-<!-- FEATURES -->
-<section class="py-20 bg-white">
-  <div class="container mx-auto px-6 text-center">
-    <h2 class="text-3xl md:text-4xl font-bold text-gray-900">Why Choose Our System?</h2>
-    <p class="mt-3 text-gray-600 max-w-2xl mx-auto">
-      Deliver seamless event experiences with tools designed for professional organizers.
-    </p>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-16">
-      <div class="p-8 rounded-xl bg-gray-50 border hover:shadow-xl transition">
-        <span class="text-5xl">🗂</span>
-        <h3 class="font-semibold text-xl text-gray-800 mt-4">Unified Event Dashboard</h3>
-        <p class="text-gray-600 mt-3">Control schedules, attendees, budgets & more from one place.</p>
-      </div>
-
-      <div class="p-8 rounded-xl bg-gray-50 border hover:shadow-xl transition">
-        <span class="text-5xl">💬</span>
-        <h3 class="font-semibold text-xl text-gray-800 mt-4">Team Communication</h3>
-        <p class="text-gray-600 mt-3">Assign roles, manage vendors, and collaborate effortlessly.</p>
-      </div>
-
-      <div class="p-8 rounded-xl bg-gray-50 border hover:shadow-xl transition">
-        <span class="text-5xl">📈</span>
-        <h3 class="font-semibold text-xl text-gray-800 mt-4">Live Performance Analytics</h3>
-        <p class="text-gray-600 mt-3">Monitor progress and measure success with insightful reports.</p>
+  <div class="relative max-w-7xl mx-auto px-6">
+    <div class="text-center max-w-4xl mx-auto">
+      <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-100 text-emerald-800 text-sm font-semibold mb-6">
+        <i class="fas fa-bolt text-xs"></i> Now with Real-Time Updates
+      </span>
+      <h1 class="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 leading-tight tracking-tight">
+        Organize Events With<br/>
+        <span class="bg-gradient-to-r from-emerald-600 to-teal-600 bg-clip-text text-transparent">Confidence & Precision</span>
+      </h1>
+      <p class="mt-6 text-lg sm:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
+        A comprehensive platform to manage, promote, and execute professional events effortlessly.
+      </p>
+      <div class="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+        {% if user.is_authenticated %}
+          <a href="{% url 'dashboard' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold rounded-xl hover:from-emerald-700 hover:to-emerald-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300">
+            <i class="fas fa-arrow-right"></i> Go to Dashboard
+          </a>
+        {% else %}
+          <a href="{% url 'register' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-emerald-600 to-emerald-700 text-white font-semibold rounded-xl hover:from-emerald-700 hover:to-emerald-800 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 transition-all duration-300">
+            Get Started Free <i class="fas fa-arrow-right"></i>
+          </a>
+        {% endif %}
+        <a href="{% url 'login' %}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-8 py-4 bg-white text-gray-700 font-semibold rounded-xl border border-gray-200 hover:border-emerald-300 hover:bg-emerald-50 transition-all duration-300">
+          <i class="fas fa-sign-in-alt"></i> Login
+        </a>
       </div>
     </div>
   </div>
 </section>
 
-<!-- STEPS / HOW IT WORKS -->
-<section class="py-20 bg-blue-50">
-  <div class="container mx-auto px-6 text-center">
-    <h2 class="text-3xl md:text-4xl font-bold text-blue-900">How It Works</h2>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-10 mt-14">
-
-      <div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
-        <h3 class="text-xl font-semibold text-blue-700">1. Create Your Event</h3>
-        <p class="text-gray-600 mt-3">Describe your event vision and set objectives.</p>
+<!-- FEATURES SECTION -->
+<section class="py-24 bg-white">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-sm font-semibold mb-4">Why EventPro</span>
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">Why Choose Our Platform?</h2>
+      <p class="mt-4 text-gray-600 max-w-2xl mx-auto text-lg">Everything you need to plan, organize, and execute flawless events in one place.</p>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="group p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:border-emerald-200 hover:shadow-xl transition-all duration-300">
+        <div class="flex items-center justify-center w-14 h-14 rounded-xl bg-emerald-100 text-emerald-600 mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+          <i class="fas fa-chart-line text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Unified Dashboard</h3>
+        <p class="text-gray-600 leading-relaxed">Control schedules, attendees, budgets, and analytics from one intuitive dashboard.</p>
       </div>
-
-      <div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
-        <h3 class="text-xl font-semibold text-blue-700">2. Organize Resources</h3>
-        <p class="text-gray-600 mt-3">Assign team roles, tasks, and vendor responsibilities.</p>
+      <div class="group p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:border-emerald-200 hover:shadow-xl transition-all duration-300">
+        <div class="flex items-center justify-center w-14 h-14 rounded-xl bg-emerald-100 text-emerald-600 mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+          <i class="fas fa-users text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Team Management</h3>
+        <p class="text-gray-600 leading-relaxed">Assign roles, manage groups, and collaborate effortlessly with your team.</p>
       </div>
-
-      <div class="bg-white p-6 rounded-xl shadow hover:shadow-xl transition">
-        <h3 class="text-xl font-semibold text-blue-700">3. Execute Successfully</h3>
-        <p class="text-gray-600 mt-3">Track progress and ensure a flawless event experience.</p>
+      <div class="group p-8 rounded-2xl bg-gray-50 border border-gray-100 hover:border-emerald-200 hover:shadow-xl transition-all duration-300">
+        <div class="flex items-center justify-center w-14 h-14 rounded-xl bg-emerald-100 text-emerald-600 mb-6 group-hover:bg-emerald-600 group-hover:text-white transition-all duration-300">
+          <i class="fas fa-bell text-xl"></i>
+        </div>
+        <h3 class="text-xl font-bold text-gray-900 mb-3">Smart Notifications</h3>
+        <p class="text-gray-600 leading-relaxed">Get email alerts for RSVPs, updates, and announcements in real-time.</p>
       </div>
-
     </div>
   </div>
 </section>
 
-{% endblock content %}
+<!-- HOW IT WORKS -->
+<section class="py-24 bg-gradient-to-br from-gray-50 to-emerald-50">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="text-center mb-16">
+      <span class="inline-block px-4 py-1.5 rounded-full bg-emerald-50 text-emerald-700 text-sm font-semibold mb-4">How It Works</span>
+      <h2 class="text-3xl sm:text-4xl font-bold text-gray-900 tracking-tight">From Idea to Event</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="text-center group">
+        <div class="relative mx-auto w-20 h-20 flex items-center justify-center">
+          <div class="absolute inset-0 bg-emerald-100 rounded-full group-hover:bg-emerald-200 transition-colors"></div>
+          <span class="relative text-2xl font-bold text-emerald-700">1</span>
+        </div>
+        <h3 class="mt-6 text-xl font-bold text-gray-900">Create Event</h3>
+        <p class="mt-3 text-gray-600 max-w-xs mx-auto">Describe your event, set date, location, and category.</p>
+      </div>
+      <div class="text-center group">
+        <div class="relative mx-auto w-20 h-20 flex items-center justify-center">
+          <div class="absolute inset-0 bg-emerald-100 rounded-full group-hover:bg-emerald-200 transition-colors"></div>
+          <span class="relative text-2xl font-bold text-emerald-700">2</span>
+        </div>
+        <h3 class="mt-6 text-xl font-bold text-gray-900">Assign Roles</h3>
+        <p class="mt-3 text-gray-600 max-w-xs mx-auto">Manage teams, assign permissions, and set up groups.</p>
+      </div>
+      <div class="text-center group">
+        <div class="relative mx-auto w-20 h-20 flex items-center justify-center">
+          <div class="absolute inset-0 bg-emerald-100 rounded-full group-hover:bg-emerald-200 transition-colors"></div>
+          <span class="relative text-2xl font-bold text-emerald-700">3</span>
+        </div>
+        <h3 class="mt-6 text-xl font-bold text-gray-900">Execute & Track</h3>
+        <p class="mt-3 text-gray-600 max-w-xs mx-auto">Monitor RSVPs, track attendance, and analyze results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock %}

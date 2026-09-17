@@ -5,7 +5,6 @@ from django.db.models import Count, Q
 from event.models import Event, RSVP
 from event.forms import EventCreateForm, RSVPForm
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def dashboard(request):
@@ -52,7 +51,7 @@ def create_event(request):
             event.participant.add(request.user)
             form.save_m2m()
             messages.success(request, "Event created successfully !")
-            return redirect('create_event')
+            return redirect('dashboard')
     return render(request, 'event/create_event.html', {'form':form})
 
 @login_required
@@ -74,13 +73,15 @@ def delete_event(request, event_id):
         event.delete()
         messages.success(request, "Event deleted successfully !")
         return redirect('dashboard')
-    return render(request, 'dashboard/dashboard.html')
+    return redirect('dashboard')
+    
 
 # def event_detail(request, event_id):
 #     role = request.user.groups.first().name if request.user.groups.exists() else None
 #     event = Event.objects.select_related('category').prefetch_related('participant').get(id=event_id)
 #     return render(request, 'event/event_detail.html', {'event':event, 'role':role})
 
+@login_required
 def rsvp_event(request, event_id):
     event = Event.objects.get(id=event_id)
 
